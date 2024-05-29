@@ -1,1 +1,1 @@
-from .isolation_source.main import *
+from .src.isolation_source.main import *
