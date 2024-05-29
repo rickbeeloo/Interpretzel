@@ -12,6 +12,8 @@ class LLMPred:
             enforce_eager=True,  # Don't compile the graph
             gpu_memory_utilization=0.99,
             max_model_len=1024,
+            repetition_penalty=1,
+            top_k = 50
         )
         self.tokenizer = self.llm.get_tokenizer()
         self.verbose = verbose 
@@ -63,8 +65,8 @@ class LLMPred:
         outputs = self.llm.generate(
             prompts,
             SamplingParams(
-                temperature=0.75,
-                top_p=0.9,
+                temperature=1,
+                top_p=1,
                 max_tokens=self.max_tokens, # 3 tokens should be more than enough, but to be safe this can be set higher
                 stop_token_ids=[self.tokenizer.eos_token_id, self.tokenizer.convert_tokens_to_ids("<|eot_id|>")],
             ),
