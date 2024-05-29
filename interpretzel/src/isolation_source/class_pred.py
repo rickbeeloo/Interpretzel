@@ -73,7 +73,7 @@ class LLMPred:
         return outputs
 
     def _check_answer(self, output):
-        answer = output.outputs[0].text.split(">")[-1].strip().lower() # I case header tags are propagated
+        answer = output.outputs[0].text.split(">")[-1].strip().lower() # In case header tags are propagated
         if "yes" in answer:
             return "yes"
         if "no" in answer:
