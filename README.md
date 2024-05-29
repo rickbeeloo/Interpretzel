@@ -1,6 +1,6 @@
 
 
-![header](docs/fresti_banner.png)
+![header](interpretzel/docs/fresti_banner.png)
 
 ## 🥨 Install
 
