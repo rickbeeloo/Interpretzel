@@ -1,0 +1,49 @@
+class_name	examples
+#Terrestrial	Mud sediments of Owens Lake, a soda lake###anoxic alkaline lake sediments, soil with plant residues beneath tree
+#Oral cavity and airways	Chicken respiratory tract, Human, Pharynx###Pharyngal mucosa
+#Human	Human wound,91-yr-old woman, From faeces of healthy human###Human feces###Human faeces###faeces of healthy human
+#Child	Human feces,1-yr-old patient, Human, Blood###Blood of a newborn child with sepsis###new born child with sepsis
+#Aquatic	sediment from hypersaline Lake Kirleutskoe, Environment, Oil water###Water,oil field,enrichment on crude oil
+#Sediment	sediment sample###sediment###From sediment of Yellow river, Volcanic sediment from Longwan###volcanic sediment
+#Hydrothermal vent	Deep-sea sediment sample collected from a hydrothermal vent field located in the East Pacific Rise###deep-sea sediment from a hydrothermal vent field, Hydrothermal vent
+#Waste	Environment, Mud###Industrial waist water###anaerobic sludge of a lab-scale UASB reactor treating the petrochemical wastewater of a purified terephthalic acid plant###industrial waste water, salted olive-processing effluents from an evaporation pond
+#Wastewater	Sewage plant###anaerobic sewage digester, Waste water sludge,aquafarm
+#Engineered	activated sludge of saline sewage treatment plant, Human prothesis,leg,63-yr-old man
+#Gastrointestinal tract	cattle manure, Animal, Cow, feces###cow manure
+#Mammals	Pig nose swab of healthy pig, Feces of a German Landrace pig###feces; pig, 8 weeks old, wild type
+#Rumen	Rumen fluid sample obtained from a fistulated cow (Holstein breed) housed at the University of Massachusetts Dairy Facility###bovine rumen, Rumen of the Korean native cattle (HanWoo; <I>Bos taurus coreanae</I>) in South Korea###rumen fluid of the Korean native cattle (HanWoo, <i>Bos taurus coreanae</i>)
+#Alkaline	Sediments of hypersaline alkaline lakes in Kulunda Steppe###sediments of a hypersaline alkaline lake, mud sediment of an alkaline, hypersaline, meromictic soda lake
+#Sewage sludge	sewage sludge, Anaerobic sewage sludge digester in Yokohama###anaerobic municipal sewage sludge digester
+#Anoxic (anaerobic)	Methanogenic granular sludge in a thermophilic upflow anaerobic sludge blanket reactor###granular sludge in a thermophilic upflow anaerobic sludge blanket reactor, Methanogenic granular sludge in a full-scale USAB reactor treating high-strength starch-based organic wastewater###A methanogenic granular sludge in a full-scale mesophilic UASB reactor treating high-strength starch-based organic wastewater
+#Plants	Grass soil###soil under grass, Surface-sterilized aboveground tissues of the halophyte Halimione portulacoides in salt marsh###surface-sterilized aboveground tissues of the halophyte Halimione portulacoides in salt marsh in Aveiro, Portugal
+#Soil	Environment, Goat dung, soil with decaying plant material###Soil with plant residues with faeces of goat###soil with decaying plant material, Environment, Forest litter###Beech leaf matter in Waldstreu (Faithful Forest)
+#Fermented	Food, Fermented vegetable, Kimchi###fermented vegetable (kimchi), Food, Red wine###spoiled red wine
+#Acidic	surface water of humic lake, acid continental solfatara
+#Freshwater	Environment, Freshwater, rock pool###freshwater from a rock pool, sediment of a freshwater lake
+#Estuary	the inner part of the stem and the root of S. maritima from the marshy, saline environment in the estuary of the river Odiel, Oil-polluted estuarine sediments on the shore of the Berre Lagoon###oil-polluted estuarine sediment
+#Brackish	Brackish water, From Sediment of Lake###Sediment of a fish dumping yard at Balugaon near Chilika Lake###estuarine brackish water sediment samples collected from a fish dumping yard
+#Wetland (Swamp)	wetland###acidic oligotrophic <i>Sphagnum</i>-dominated wetland, mountain peat bog
+#Tundra	high Arctic tundra near the settlement Ny-A°lesund, acidic Sphagnum tundra peatlands###sphagnum peat of tundra wetland
+#Built environment	water damaged indoor wall (gypsum liner), Fish processing plant, drain pool###drain pool of fish processing plant
+#Stomach	gut of a horsefly (<i>Tabanus gladiator</i>), stomach mucosa of wild boar(<i>Sus scrofa</i>)
+#Insecta	Hindgut of larvae of the scarab beetle (<I>Pachnoda marginata</I>)###hindgut of <I>Pachnoda marginata</I> larvae, From `Apis mellifera` midgut###Midgut of the honey bee (<I>Apis mellifera</I>)###midgut of the honey bee A. mellifera
+#Dairy product	Emmenthaler cheese###emmental cheese, fermented milk (raib), Algerian cow
+#Contamination	soil contaminated with coal tar creosote, subsoil (20 m depth) from a site contaminated with chlorinated hydrocarbons
+#Mine	From Coalbed water###coal mine water sample, From sediment from a salt mine###ancient salt sediment from of a salt mine
+#Forest	Forest soil, planted with red pine <i>Pinus resinosa</i> Ait., soil with plant residues from stone pine forest
+#Agriculture	Garden soil###vegetable garden soil, Farmland soil at Suwon###farmland soil
+#Grassland	Chalky grassland soil###chalky grassland, mud from cattle pasture
+#Leaf (Phyllosphere)	leaf of <i>Cerastium holosteoides</i>, leaves of infected plants of <i>Solanum tuberosum</i> cultivar Spunta
+#Urogenital tract	Human urinary tract, Human, Cervix###Human cervix,arthritis and cervicitis
+#Groundwater	soil and groundwater, Groundwater###chlorinated solvent contaminated groundwater
+#Rhizosphere	Soil###Soil,rhizosphere###rhizosphere soil of <I>Paspalum notatum</I>, soil sample from rhizosphere of a Mugunghwa flower
+#Spring	Low-salt, sulfide- and sulfur-rich spring (Zodletone Spring)###low-salt, sulfide- and sulfur-rich spring, thermophilic spring
+#Mangrove	From sediment sample, Xiamen island mangrove forest###the surface sediment sample (10 cm depth) of Ximen island mangrove forest, anoxic organic-rich offshore mangrove sediment
+#Arid	Saharan soil at a palm grove###saharan soil, extreme hyper-arid soil sample (1033 m above sea level)
+#Mouth	Human jaw, Human, Scarlet fever###scarlet fever
+#Plant litter (Forest)	Plant, Litter###plant litter, leaf litter
+#Air	Air,operating theater, Environment, Air exhaust duct of pig fattening farms###Exhaust air of a pig barn###exhausted air of a pig barn (bioaerosol sampling)###exhaust air of a pig barn (bioaerosol sampling)
+#Saliva	Human, Saliva###saliva, Saliva
+#Ice	Ice of the No. 1 glacier###glacier ice, Environment, Antarctic sea ice brine###antarctic sea ice brine
+#Cnidaria (Corals)	From coral###Acropora coral collected off the Kenting coast of Southern Taiwan, reef-building coral <i>Isopora palifera</i>, collected off the coast
+#Permafrost	1.8- to 3-Million-year-old ancient permafrost sediments, Sediment collected from ancient permafrost
