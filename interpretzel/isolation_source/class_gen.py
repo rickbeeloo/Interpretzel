@@ -83,13 +83,3 @@ class DescGen:
         parsed = self._parse_output(outputs, request_mapping)
         self._write_output(parsed, output_file)
 
-import sys 
-
-args = sys.argv
-
-input_file = args[1]
-model = args[2]
-output_file = args[3]
-g = DescGen(model)
-g.process(input_file, output_file)
-    
