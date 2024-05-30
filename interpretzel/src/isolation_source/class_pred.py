@@ -39,7 +39,18 @@ class LLMPred:
     def _get_templates(self, class_json):
         templates = dict()
         for class_name, desc in class_json.items():
-            q = f'Given the description for the category "{class_name}" being: {desc}.\n\nIs a sample with the metadata "WILDCARD" clearly part of {class_name}? Reply with JUST YES or NO, no explanation.'
+            q = f"""
+            ###DESCRIPTION###            
+            {class_name} description: {desc}
+            
+            ###INSTRUCTION###
+            - Thinks step by step and avoid bias. 
+            - Only reason based on the provided text, no far stretches, no assumptions. 
+            - You must reply with either YES or NO. 
+
+            Is a sample with the metadata "WILDCARD" clearly part of {class_name}?
+
+            """
             q = q.replace("WILDCARD", "{}")
             templates[class_name] = q
         return templates # dict
