@@ -50,7 +50,8 @@ class LLMPred:
             - You must reply with either YES or NO. 
             - Only reply YES when it's undoubtedly clear from the metadata that it fits the category and its context.
 
-            Is a sample with the metadata "WILDCARD" clearly part of {class_name}?
+            Given the sample metadata: "WILDCARD".
+            Should this sample be placed under {class_name}?
 
             """
             q = q.replace("WILDCARD", "{}")
