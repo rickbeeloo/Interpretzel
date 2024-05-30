@@ -40,13 +40,15 @@ class LLMPred:
         templates = dict()
         for class_name, desc in class_json.items():
             q = f"""
-            ###DESCRIPTION###            
+            ###Context###            
             {class_name} description: {desc}
             
             ###INSTRUCTION###
             - Thinks step by step and avoid bias. 
-            - Only reason based on the provided text, no far stretches, no assumptions. 
+            - Only reason based on the provided context. 
+            - Avoid assumptions from the metadata
             - You must reply with either YES or NO. 
+            - Ony reply YES when it's undoubtly clear from the metadata that it fits the category and its context.
 
             Is a sample with the metadata "WILDCARD" clearly part of {class_name}?
 
