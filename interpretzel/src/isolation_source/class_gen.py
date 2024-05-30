@@ -41,7 +41,7 @@ class DescGen:
         prompts = []
         i = 0
         for class_label, examples in data.items():
-            q = f"Describe the category {class_label} in one sentence, provide two examples. Examples of samples wtihint this category are: {examples}"
+            q = f"Clearly describe the category {class_label} in one sentence. Examples of samples wtihint this category are: {examples}"
             chat = [{'role': 'user', 'content': q}]    
             tokenized_chat = self.tokenizer.apply_chat_template(chat, tokenize=False)
             prompts.append(tokenized_chat)

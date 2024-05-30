@@ -48,7 +48,7 @@ class LLMPred:
             - Only reason based on the provided context. 
             - Avoid assumptions from the metadata
             - You must reply with either YES or NO. 
-            - Ony reply YES when it's undoubtly clear from the metadata that it fits the category and its context.
+            - Only reply YES when it's undoubtedly clear from the metadata that it fits the category and its context.
 
             Is a sample with the metadata "WILDCARD" clearly part of {class_name}?
 
