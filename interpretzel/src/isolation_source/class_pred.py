@@ -39,21 +39,14 @@ class LLMPred:
     def _get_templates(self, class_json):
         templates = dict()
         for class_name, desc in class_json.items():
-            q = f"""
-            ###Context###            
-            {class_name} description: {desc}
-            
-            ###INSTRUCTION###
-            - Thinks step by step and avoid bias. 
-            - Only reason based on the provided context. 
-            - Avoid assumptions from the metadata
-            - You must reply with either YES or NO. 
-            - Only reply YES when it's undoubtedly clear from the metadata that it fits the category and its context.
+            q = f"""You are an expert in categorizing environmental data. Given the following metadata description, determine if it belongs to the category specified. Respond only with "YES" or "NO".
 
-            Given the sample metadata: "WILDCARD".
-            Should this sample be placed under {class_name}?
+Metadata: "WILDCARD"
+Category: "{class_name}"
 
-            """
+Does the metadata belong to the category? Reply with YES or NO.
+
+"""
             q = q.replace("WILDCARD", "{}")
             templates[class_name] = q
         return templates # dict
