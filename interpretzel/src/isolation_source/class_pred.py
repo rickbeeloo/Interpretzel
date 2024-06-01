@@ -1,6 +1,6 @@
 
 #from vllm import LLM, SamplingParams
-from openai import OpenAI
+from openai import AsyncOpenAI
 from collections import defaultdict
 import json 
 import numpy as np 
@@ -17,7 +17,7 @@ class LLMPred:
 
     def __init__(self, model_name = "meta-llama/Meta-Llama-3-8B-Instruct", verbose = False, max_tokens = 2, base_url ="http://localhost:8000/v1"):
         self.model_name = model_name
-        self.client = OpenAI(
+        self.client = AsyncOpenAI(
             api_key="EMPTY",
             base_url= base_url,
         )
@@ -66,7 +66,9 @@ The metadata is clearly a child of the category: [YES or NO]?
             return False
         
     async def _prompt_llm(self, prompt):
-        completion = self.client.chat.completions.create(
+        print("model: ", self.model_name)
+        print("prompt: ", prompt)
+        completion = await self.client.chat.completions.create(
             model = self.model_name,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -90,6 +92,7 @@ The metadata is clearly a child of the category: [YES or NO]?
         class_json = self._read_json_descriptions(class_file)
         for query in queries:
              for class_name, desc in class_json.items():
+                class_name.lstrip("#").strip()
                 prompt = await self._get_prompt(query, class_name)
                 cat_applies_bool = await self._prompt_llm(prompt)
                 if cat_applies_bool:
