@@ -21,7 +21,6 @@ class LLMPred:
             api_key="EMPTY",
             base_url= base_url,
         )
-        self.tokenizer = self.llm.get_tokenizer()
         self.verbose = verbose 
         self.max_tokens = max_tokens
     
@@ -42,7 +41,7 @@ class LLMPred:
             print(f'[INFO] Loaded {len(desc)} descriptons')
             return desc 
         
-    async def _get_prompt(query, cat):
+    async def _get_prompt(self, query, cat):
         return f"""You are an expert in categorizing environmental data. Given the following metadata description, determine if it belongs to the category specified. Respond only with "YES" or "NO".
 
 Metadata: "{query}"
@@ -51,7 +50,7 @@ Category: "{cat}"
 The metadata is clearly a child of the category: [YES or NO]?
 """ 
 
-    async def process_reply(reply, cut_off=99.5):
+    async def process_reply(self, reply, cut_off=99.5):
         # Extract answer with prob
         answers = dict()
         for top in reply.choices[0].logprobs.top_logprobs:
