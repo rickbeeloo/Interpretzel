@@ -39,16 +39,16 @@ class CountryPred:
             print('[WARNING] We only kept unique items in your query file')
         return unique_queries
 
-    def _exact_match_pass(self, data, by="name"):
-        assert by in ["name", "iso3"], "Invalid by option"
-        mapped = dict()
-        unmapped = []
-        if by == "name":
-            for q in data:
-                clean_q = q.lower().strip()
-                res = self.by_name.get(clean_q)
-                if res: 
-                    mapped[]
+    # def _exact_match_pass(self, data, by="name"):
+    #     assert by in ["name", "iso3"], "Invalid by option"
+    #     mapped = dict()
+    #     unmapped = []
+    #     if by == "name":
+    #         for q in data:
+    #             clean_q = q.lower().strip()
+    #             res = self.by_name.get(clean_q)
+    #             if res: 
+    #                 mapped[]
                 
 
 

@@ -1,22 +1,28 @@
 
-from vllm import LLM, SamplingParams
+#from vllm import LLM, SamplingParams
+from openai import OpenAI
 from collections import defaultdict
 import json 
+import numpy as np 
+
+SYSTEM_PROMPT = """You are Interpretzel, an expert free-text classifier. Whenever you receive biological sample metada and a 
+category you carefully analyze whether the metadata fits the category and reply with a simple YES or NO. 
+You are very objective, you do not make assumptions about the data, neither do you have any bias. 
+However, you do realize you are standardizing free text fields that might have tiny spelling mistakes which you try to interpret.
+"""
+
 
 class LLMPred:
 
-    def __init__(self, model_name = "meta-llama/Meta-Llama-3-8B-Instruct", verbose = True, max_tokens = 10):
+
+    def __init__(self, model_name = "meta-llama/Meta-Llama-3-8B-Instruct", verbose = False, max_tokens = 2, base_url ="http://localhost:8000/v1"):
         self.model_name = model_name
-        self.llm = LLM(
-            model= model_name, 
-            enforce_eager=True,  # Don't compile the graph
-            gpu_memory_utilization=0.99,
-            max_model_len=1024
+        self.client = OpenAI(
+            api_key="EMPTY",
+            base_url= base_url,
         )
         self.tokenizer = self.llm.get_tokenizer()
         self.verbose = verbose 
-        self.na_fallback = "no"
-        self.unclear = 0
         self.max_tokens = max_tokens
     
     def _read_queries(self, file_path):
@@ -36,89 +42,58 @@ class LLMPred:
             print(f'[INFO] Loaded {len(desc)} descriptons')
             return desc 
         
-    def _get_templates(self, class_json):
-        templates = dict()
-        for class_name, desc in class_json.items():
-            q = f"""You are an expert in categorizing environmental data. Given the following metadata description, determine if it belongs to the category specified. Respond only with "YES" or "NO".
+    async def _get_prompt(query, cat):
+        return f"""You are an expert in categorizing environmental data. Given the following metadata description, determine if it belongs to the category specified. Respond only with "YES" or "NO".
 
-Metadata: "WILDCARD"
-Category: "{class_name}"
+Metadata: "{query}"
+Category: "{cat}"
 
-Does the metadata belong to the category? Reply with YES or NO.
+The metadata is clearly a child of the category: [YES or NO]?
+""" 
 
-"""
-            q = q.replace("WILDCARD", "{}")
-            templates[class_name] = q
-        return templates # dict
-
-    def _fill_templates(self, queries, templates):
-        prompts = []
-        req_mapping = dict()
-        class_mapping = dict()
-        i = 0
-        for query in queries:
-            for class_name, templ in templates.items():
-                chat = [{"role":"user", "content":templ.format(query)}]
-                tokenized_chat = self.tokenizer.apply_chat_template(chat, tokenize=False)
-                prompts.append(tokenized_chat)
-                req_mapping[i] = query
-                class_mapping[i] = class_name
-                i += 1
-        return prompts, req_mapping, class_mapping
-    
-    def _prompt_llm(self, prompts):
-        outputs = self.llm.generate(
-            prompts,
-            SamplingParams(
-                temperature=1,
-                top_p=1,
-                repetition_penalty=1,
-                top_k = 50,
-                max_tokens=self.max_tokens, # 3 tokens should be more than enough, but to be safe this can be set higher
-                stop_token_ids=[self.tokenizer.eos_token_id, self.tokenizer.convert_tokens_to_ids("<|eot_id|>")],
-            ),
-            use_tqdm=True,
-        )
-        return outputs
-
-    def _check_answer(self, output):
-        answer = output.outputs[0].text.split(">")[-1].strip().lower() # In case header tags are propagated
-        if "yes" in answer:
-            return "yes"
-        if "no" in answer:
-            return "no"
+    async def process_reply(reply, cut_off=99.5):
+        # Extract answer with prob
+        answers = dict()
+        for top in reply.choices[0].logprobs.top_logprobs:
+            for answer, prob in top.items():
+                # Log prob to linear prob
+                answers[answer.lower()] = np.round(np.exp(prob)*100,2)   
+        # Check how much  more likely one is over the other
+        yes_prob =  answers.get("yes", 0)
+       # no_prob = answers.get("no", 0)
+        if yes_prob > cut_off:
+            return True
         else:
-            self.unclear += 1
-            return self.na_fallback
-    
-    def _process_outputs(self, outputs, request_mapping, class_mapping):
-        predictions = defaultdict(list)
-        for output in outputs:
-            req_id = int(output.request_id)
-            query = request_mapping[int(req_id)]
-            class_name = class_mapping[int(req_id)]
-            raw = output.outputs[0].text
-            answer = self._check_answer(output)
-            if self.verbose:
-                emoji = "❌" if answer == "no" else "✅"
-                print(f"Q: {query}\nP:{output.prompt}\nC:{class_name}\nA:{raw}\nVerdict:{emoji}\n")
-            if answer == "yes":
-                predictions[query].append(class_name)
-        return predictions
+            return False
+        
+    async def _prompt_llm(self, prompt):
+        completion = self.client.chat.completions.create(
+            model = self.model_name,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content":prompt},
+                ],
+            logprobs=True, 
+            top_logprobs=2,
+            max_tokens=2
+        )
+        return await self.process_reply(completion)
 
     def _write_output(self, preds, output_file):
         with open(output_file, "w") as out:
             for query, pred_list in preds.items():
                 class_str = ", ".join(pred_list)
                 out.write(f"{query}\t{class_str}\n")
-        print(f"Unclear predictions to fallback: {self.unclear}")
-
-    def predict(self, query_file, class_file, output_file):
+        
+    async def predict(self, query_file, class_file, output_file):
+        predictions = defaultdict(list)
         queries = self._read_queries(query_file)
         class_json = self._read_json_descriptions(class_file)
-        templates = self._get_templates(class_json)
-        prompts, req_mapping, class_mapping = self._fill_templates(queries, templates)
-        outputs = self._prompt_llm(prompts)
-        predictions = self._process_outputs(outputs, req_mapping, class_mapping)
+        for query in queries:
+             for class_name, desc in class_json.items():
+                prompt = await self._get_prompt(query, class_name)
+                cat_applies_bool = await self._prompt_llm(prompt)
+                if cat_applies_bool:
+                    predictions[query].append(class_name)
         self._write_output(predictions, output_file)
-
+    

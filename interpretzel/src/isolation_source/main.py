@@ -1,6 +1,8 @@
 from .class_gen import DescGen
 from .class_pred import LLMPred
 import argparse
+import asyncio
+
 
 def pretzel_iso_gen():
     parser = argparse.ArgumentParser(prog='Interpretzel iso generator V1')
@@ -19,4 +21,4 @@ def pretzel_iso_pred():
     parser.add_argument('-m', nargs="?", default=None, help='Model to use', type = str, const="meta-llama/Meta-Llama-3-8B-Instruct")
     args = parser.parse_args()
     gen = LLMPred(args.m)
-    gen.predict(args.i, args.c, args.o)
+    asyncio.run(gen.predict(args.i, args.c, args.o))
