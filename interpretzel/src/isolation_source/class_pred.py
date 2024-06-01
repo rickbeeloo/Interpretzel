@@ -3,6 +3,7 @@
 from openai import AsyncOpenAI
 from collections import defaultdict
 import json 
+from colorama import Fore, Style
 import numpy as np 
 
 SYSTEM_PROMPT = """You are Interpretzel, an expert free-text classifier. Whenever you receive biological sample metada and a 
@@ -50,7 +51,7 @@ Category: "{cat}"
 The metadata is clearly a child of the category: [YES or NO]?
 """ 
 
-    async def process_reply(self, reply, cut_off=99.5):
+    async def process_reply(self, reply):
         # Extract answer with prob
         answers = dict()
         for top in reply.choices[0].logprobs.top_logprobs:
@@ -59,12 +60,9 @@ The metadata is clearly a child of the category: [YES or NO]?
                 answers[answer.lower()] = np.round(np.exp(prob)*100,2)   
         # Check how much  more likely one is over the other
         yes_prob =  answers.get("yes", 0)
-       # no_prob = answers.get("no", 0)
-        if yes_prob > cut_off:
-            return True
-        else:
-            return False
-        
+        no_prob = answers.get("no", 0)
+        return {"yes":yes_prob, "no":no_prob}
+
     async def _prompt_llm(self, prompt):
         print("model: ", self.model_name)
         print("prompt: ", prompt)
@@ -91,11 +89,14 @@ The metadata is clearly a child of the category: [YES or NO]?
         queries = self._read_queries(query_file)
         class_json = self._read_json_descriptions(class_file)
         for query in queries:
+             if self.verbose: print(Fore.MAGENTA + "query: " + query)
              for class_name, desc in class_json.items():
-                class_name.lstrip("#").strip()
+                class_name = class_name.strip().lstrip("#")
                 prompt = await self._get_prompt(query, class_name)
-                cat_applies_bool = await self._prompt_llm(prompt)
-                if cat_applies_bool:
+                yes_no_prob = await self._prompt_llm(prompt)
+                print(f"Cat: {class_name}\n{yes_no_prob}\n")
+                if yes_no_prob["yes"] > 99:
+                    if self.verbose: print(Fore.GREEN + f"\t{class_name}: {yes_no_prob["yes"]}%")
                     predictions[query].append(class_name)
         self._write_output(predictions, output_file)
     
