@@ -25,7 +25,10 @@ class LLMPred:
         )
         self.verbose = verbose 
         self.max_tokens = max_tokens
-        print(f"Verbose: {self.verbose}")
+        if self.verbose.count("v") >=1:
+            print(f"Model: {self.model_name}")
+            print(f"Max tokens: {self.max_tokens}")
+            print(f"Client url: {base_url}")
     
     def _read_queries(self, file_path):
         unique_queries = set()
@@ -60,7 +63,7 @@ The metadata is clearly a child of the category: [YES or NO]?
             for answer, prob in top.items():
                 # Log prob to linear prob
                 answers[answer.lower()] = np.round(np.exp(prob)*100,2)   
-        if self.verbose:
+        if self.verbose.count('v') >=2:
             print(answers)
         # Check how much  more likely one is over the other
         yes_prob =  answers.get("yes", 0)
@@ -92,14 +95,15 @@ The metadata is clearly a child of the category: [YES or NO]?
         class_json = self._read_json_descriptions(class_file)
         total = len(queries)
         for (i, query) in enumerate(queries):
-             if self.verbose: 
+             if self.verbose.count("v") >=1 :
                  print(Fore.MAGENTA + f"({i}/{total}): " + query + Style.RESET_ALL) 
              for class_name, desc in class_json.items():
                 class_name = class_name.strip().lstrip("#")
                 prompt = await self._get_prompt(query, class_name)
                 yes_no_prob = await self._prompt_llm(prompt)
                 if yes_no_prob["yes"] > cut_off:
-                    if self.verbose: print(Fore.GREEN + f"\t{class_name}: {yes_no_prob['yes']}%" + Style.RESET_ALL)
+                    if self.verbose.count("v") >=1: 
+                        print(Fore.GREEN + f"\t{class_name}: {yes_no_prob['yes']}%" + Style.RESET_ALL)
                     predictions[query].append(class_name)
         self._write_output(predictions, output_file)
     
